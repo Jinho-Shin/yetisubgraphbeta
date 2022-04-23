@@ -1,0 +1,25 @@
+specVersion: 0.0.2
+description: Test Subgraph for Yeti
+repository: https://github.com/graphprotocol/example-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Yeti-Test
+    network: mainnet
+    source:
+      address: '0xBBbbbbbBBBBeC8bF32635374c0717C44B5c535eF'
+      abi: Yeti
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Transfers
+      abis:
+        - name: Yeti
+          file: ./abis/Yeti.json
+      eventHandlers:
+        - event: TroveCreated(indexed address,uint256)
+          handler: handleTroveCreated
+      file: ./src/mapping.ts
