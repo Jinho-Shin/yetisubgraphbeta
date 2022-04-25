@@ -1,5 +1,52 @@
-type TroveCreated @entity {
+type newTrove @entity {
   id: ID!
   borrower: Bytes!
-  arrayIndex: Int!
+  arrayIndex: BigInt!
+  debt: BigInt!
+  amounts: [BigInt!]!
+  transaction: Bytes!
+  timestamp: BigInt!
+  }
+
+enum BorrowerOperation {
+    openTrove
+    closeTrove
+    adjustTrove
+  }
+
+type updatedTrove @entity {
+  id: ID!
+  borrower: Bytes!
+  arrayIndex: BigInt!
+  debt: BigInt!
+  amounts: [BigInt!]!
+  tokens: [Bytes!]!
+  transaction: Bytes!
+  timestamp: BigInt!
+  operation: String!
+  currentICR: BigInt!
+  managed: Int!
+  eventAddress: Bytes!
+  }
+
+type YUSDPaid @entity {
+  id: ID!
+  borrower: Bytes!
+  fee: BigInt!
+  transaction: Bytes!
+  timestamp: BigInt!
+}
+
+type VariablePaid @entity {
+  id: ID!
+  borrower: Bytes!
+  fee: BigInt!
+  transaction: Bytes!
+  timestamp: BigInt!
+}
+
+type totalStake @entity {
+  id: ID!
+  token: Bytes!
+  newTotalStakes: BigInt!
 }

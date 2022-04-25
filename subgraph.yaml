@@ -6,10 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Yeti-Test
-    network: mainnet
+    network: avalanche
     source:
       address: '0xBBbbbbbBBBBeC8bF32635374c0717C44B5c535eF'
-      abi: Yeti
+      abi: BorrowOperation
+      startBlock: 13221859
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -17,9 +18,39 @@ dataSources:
       entities:
         - Transfers
       abis:
-        - name: Yeti
-          file: ./abis/Yeti.json
+        - name: BorrowOperation
+          file: ./abis/BorrowOperator.json
+        - name: TroveManager
+          file: ./abis/TroveManager.json
       eventHandlers:
         - event: TroveCreated(indexed address,uint256)
           handler: handleTroveCreated
-      file: ./src/mapping.ts
+        - event: TroveUpdated(indexed address,uint256,address[],uint256[],uint8)
+          handler: handleTroveUpdated 
+        - event: YUSDBorrowingFeePaid(indexed address,uint256)
+          handler: handleYUSDPaid
+        - event: VariableFeePaid(indexed address,uint256)
+          handler: handleVariablePaid
+      file: ./src/borrowerMapping.ts
+  - kind: ethereum/contract
+    name: TroveManager
+    network: avalanche
+    source:
+      address: '0x000000000000614c27530d24B5f039EC15A61d8d'
+      abi: TroveManager
+      startBlock: 13221859
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Transfers
+      abis:
+        - name: TroveManager
+          file: ./abis/TroveManager.json
+      eventHandlers:
+        - event: TroveUpdated(indexed address,uint256,address[],uint256[],uint8)
+          handler: handleTroveUpdated
+        - event: TotalStakesUpdated(address,uint256)
+          handler: handleTotalStakesUpdated
+      file: ./src/managerMapping.ts
