@@ -1,7 +1,8 @@
 import { TroveUpdated, TroveManager, TotalStakesUpdated} from '../generated/TroveManager/TroveManager'
-import {updatedTrove, totalStake} from '../generated/schema'
+import {updatedTrove, totalStake, newLiquidation} from '../generated/schema'
 import { Bytes } from '@graphprotocol/graph-ts'
 import { Address} from '@graphprotocol/graph-ts'
+import { Liquidation } from '../generated/TroveManagerLiquidations/TroveManagerLiquidations'
 
 function addressToBytes(address: Address): Bytes {
   return Bytes.fromHexString(address.toHexString())

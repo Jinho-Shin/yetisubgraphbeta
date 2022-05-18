@@ -27,6 +27,10 @@ type updatedTrove @entity {
   currentICR: BigInt!
   managed: Int!
   eventAddress: Bytes!
+  collsIn : [Bytes!]!
+  amountsIn: [BigInt!]!
+  collsOut: [Bytes!]!
+  amountsOut: [BigInt!]!
   }
 
 type YUSDPaid @entity {
@@ -49,4 +53,35 @@ type totalStake @entity {
   id: ID!
   token: Bytes!
   newTotalStakes: BigInt!
+}
+
+type newLiquidation @entity {
+  id: ID!
+  liquidatedAmount: BigInt!
+  totalYUSDGasCompensation: BigInt!
+  totalCollTokens: [Bytes!]!
+  totalCollAmounts: [BigInt!]!
+  totalCollGasCompTokens: [Bytes!]!
+  totalCollGasCompAmounts: [BigInt!]!
+  timestamp: BigInt!
+}
+
+type newRedemption @entity {
+  id: ID!
+  borrower: Bytes!
+  attemptedYUSDAmount: BigInt!
+  actualYUSDAmount: BigInt!
+  YUSDPaid: BigInt!
+  tokens: [Bytes!]!
+  amounts: [BigInt!]!
+  timestamp: BigInt!
+}
+
+type newDeposit @entity {
+  id: ID!
+  user: Bytes!
+  boostedPartition: BigInt!
+  amountOfLP: BigInt!
+  rewardRate: BigInt!
+  timestamp: BigInt!
 }

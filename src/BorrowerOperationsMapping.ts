@@ -1,8 +1,13 @@
-import {BorrowOperation, TroveCreated, TroveUpdated, YUSDBorrowingFeePaid, VariableFeePaid} from '../generated/Yeti-Test/BorrowOperation'
+import {BorrowOperation, TroveCreated, TroveUpdated, YUSDBorrowingFeePaid, VariableFeePaid, AdjustTroveCall} from '../generated/Yeti-Test/BorrowOperation'
 import {TroveManager } from '../generated/TroveManager/TroveManager'
 import { newTrove, updatedTrove, YUSDPaid, VariablePaid} from '../generated/schema'
 import { Address, ethereum, Bytes} from '@graphprotocol/graph-ts'
 
+function addressToBytes(address: Address): Bytes {
+  return Bytes.fromHexString(address.toHexString())
+}
+
+var BorrowerOperation = ["openTrove", "closeTrove", "adjustTrove"]
 
 export function handleTroveCreated(event: TroveCreated): void {
   let trove = new newTrove(event.block.hash.toHex())
@@ -13,13 +18,6 @@ export function handleTroveCreated(event: TroveCreated): void {
   trove.save()
 }
 
-function addressToBytes(address: Address): Bytes {
-  return Bytes.fromHexString(address.toHexString())
-}
-
-var BorrowerOperation = ["openTrove", "closeTrove", "adjustTrove"]
-
-
 export function handleTroveUpdated(event: TroveUpdated): void {
   let id = event.transaction.hash.toHex()
   let trove = updatedTrove.load(id)
@@ -28,20 +26,17 @@ export function handleTroveUpdated(event: TroveUpdated): void {
     trove.borrower = event.params._borrower
     trove.debt = event.params._debt
     trove.amounts = event.params._amounts
-    trove.transaction = event.transaction.hash
+    trove.tokens =  event.params._tokens.map<Bytes>((token) => {return addressToBytes(token)})
     trove.timestamp = event.block.timestamp
     trove.operation = BorrowerOperation[event.params.operation]
-    trove.tokens =  event.params._tokens.map<Bytes>((token) => {return addressToBytes(token)})
-    trove.managed = 1
     trove.save()
   } else {
     trove.borrower = event.params._borrower
     trove.debt = event.params._debt
     trove.amounts = event.params._amounts
-    trove.transaction = event.transaction.hash
+    trove.tokens =  event.params._tokens.map<Bytes>((token) => {return addressToBytes(token)})
     trove.timestamp = event.block.timestamp
     trove.operation = BorrowerOperation[event.params.operation]
-    trove.tokens =  event.params._tokens.map<Bytes>((token) => {return addressToBytes(token)})
     let contract = TroveManager.bind(Address.fromBytes(trove.eventAddress))
     trove.currentICR = contract.getCurrentICR(Address.fromBytes(trove.borrower))
     trove.managed = 2
