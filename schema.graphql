@@ -20,14 +20,15 @@ type updatedTrove @entity {
   arrayIndex: BigInt!
   debt: BigInt!
   amounts: [BigInt!]!
-  tokens: [Bytes!]!
   transaction: Bytes!
   timestamp: BigInt!
   operation: String!
   currentICR: BigInt!
   managed: Int!
+  tokens: [Bytes!]!
   eventAddress: Bytes!
-  collsIn : [Bytes!]!
+  length: Int!
+  collsIn: [Bytes!]!
   amountsIn: [BigInt!]!
   collsOut: [Bytes!]!
   amountsOut: [BigInt!]!
@@ -83,5 +84,7 @@ type newDeposit @entity {
   boostedPartition: BigInt!
   amountOfLP: BigInt!
   rewardRate: BigInt!
+  userFactor: BigInt!
+  sumOfFactors: BigInt!
   timestamp: BigInt!
 }

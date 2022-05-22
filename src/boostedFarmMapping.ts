@@ -13,5 +13,8 @@ export function handleDeposit(event: Deposit): void {
     deposit.boostedPartition = contract.boostedPartition()
     deposit.rewardRate = contract.rewardRate()
     deposit.amountOfLP = contract.userInfo(event.params.user).value0
+    deposit.userFactor = contract.userInfo(event.params.user).value2
+    deposit.sumOfFactors = contract.sumOfFactors()
     deposit.save()
+    
 }

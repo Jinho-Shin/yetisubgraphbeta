@@ -17,12 +17,17 @@
   },
   "dependencies": {
     "@angular/common": "^13.3.9",
+    "@angular/core": "^13.3.9",
     "babel-polyfill": "^6.26.0",
     "babel-register": "^6.26.0",
     "coingecko-api": "^1.0.10",
+    "eth-data-decoder": "^0.0.2",
     "moment": "^2.29.3",
+    "node": "^17.7.2",
+    "rxjs": "^6.6.7",
     "truffle": "^5.0.4",
     "truffle-contract": "^4.0.5",
-    "truffle-hdwallet-provider": "^1.0.4"
+    "truffle-hdwallet-provider": "^1.0.4",
+    "zone.js": "^0.11.5"
   }
 }

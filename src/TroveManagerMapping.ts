@@ -19,7 +19,7 @@ export function handleTroveUpdated(event: TroveUpdated): void {
   trove.transaction = event.transaction.hash
   trove.timestamp = event.block.timestamp
   trove.operation = BorrowerOperation[event.params.operation]
-  trove.tokens =  event.params._tokens.map<Bytes>((token) => {return addressToBytes(token)})
+  trove.tokens =  event.params._tokens.map<Bytes>((token) => token)
   trove.managed = 5
   trove.save()
 }
