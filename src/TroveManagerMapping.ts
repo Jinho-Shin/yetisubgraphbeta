@@ -20,7 +20,6 @@ export function handleTroveUpdated(event: TroveUpdated): void {
   trove.timestamp = event.block.timestamp
   trove.operation = BorrowerOperation[event.params.operation]
   trove.tokens =  event.params._tokens.map<Bytes>((token) => token)
-  trove.managed = 5
   trove.save()
 }
 
@@ -34,10 +33,6 @@ export function handleTotalStakesUpdated(event: TotalStakesUpdated): void {
   if (trove == null) {
     trove = new updatedTrove(id)
     trove.eventAddress = event.address
-    trove.managed = 3
-    trove.save()
-  } else {  
-    trove.managed = 4
     trove.save()
   }
 }

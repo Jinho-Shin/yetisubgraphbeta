@@ -29,7 +29,9 @@ export function handleRedemption(event: Redemption): void {
         redemption = new newRedemption(id)
     }
     redemption.borrower = event.params._borrower
+    redemption.transaction = event.transaction.hash
     redemption.timestamp = event.block.timestamp
+    redemption.blockNum = event.block.number
     redemption.save()
   }
 

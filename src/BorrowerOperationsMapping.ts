@@ -44,10 +44,6 @@ export function handleTroveUpdated(event: TroveUpdated): void {
     trove.operation = BorrowerOperation[event.params.operation]
     let contract = TroveManager.bind(Address.fromBytes(trove.eventAddress))
     trove.currentICR = contract.getCurrentICR(Address.fromBytes(trove.borrower))
-    // const dataToDecode = getTxnInputDataToDecode(event)
-    // let decodedData = decoder(event.transaction.input);
-    // let s = decodedData.params[0]
-    // trove.temp2 = s.toBytes()
 
     function getTxnInputDataToDecode(event: ethereum.Event): Bytes {
       const inputDataHexString = event.transaction.input.toHexString().slice(10); //take away function signature: '0x????????'
@@ -62,22 +58,17 @@ export function handleTroveUpdated(event: TroveUpdated): void {
     );
     if (decoded != null) {
       const t = decoded.toTuple();
-      trove.length = t.length
       trove.collsIn = t[0].toAddressArray().map<Bytes>((token) => token)
       trove.amountsIn = t[1].toBigIntArray()
       trove.collsOut = t[2].toAddressArray().map<Bytes>((token) => token)
       trove.amountsOut = t[3].toBigIntArray()
+      trove.YUSDchange = t[4].toBigInt()
+      trove.isDebtIncrease = t[5].toBoolean()
     }
     trove.save()
   }
 
 }
-
-// function getTxnInputDataToDecode(event: ethereum.Event): Bytes {
-//   const inputDataHexString = event.transaction.input.toHexString().slice(10); //take away function signature: '0x????????'
-//   const hexStringToDecode = '0x0000000000000000000000000000000000000000000000000000000000000020' + inputDataHexString; // prepend tuple offset
-//   return Bytes.fromByteArray(Bytes.fromHexString(hexStringToDecode));
-// }
 
 export function handleYUSDPaid(event: YUSDBorrowingFeePaid): void {
   let id = event.block.hash.toHex()
@@ -85,7 +76,8 @@ export function handleYUSDPaid(event: YUSDBorrowingFeePaid): void {
   yusdPaid.borrower = event.params._borrower
   yusdPaid.fee = event.params._YUSDFee
   yusdPaid.transaction = event.transaction.hash
-
+  yusdPaid.blockNum = event.block.number
+  yusdPaid.timestamp = event.block.timestamp
   yusdPaid.save()
 }
 
